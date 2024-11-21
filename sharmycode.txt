@@ -1,0 +1,101 @@
+// APP 
+
+import { NavigationContainer } from "@react-navigation/native";
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+
+import Home from "./screens/Home";
+import Login from "./screens/Login";
+import Profile from "./screens/Profile";
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  const TabNavigator = () => {
+    return (
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+
+            if (route.name === "Profile") {
+              iconName = "user";
+            } else if (route.name === "Home") {
+              iconName = "home";
+            }
+
+            return (
+              <FontAwesomeIcon name={iconName} color={color} size={size} />
+            );
+          },
+          tabBarActiveTintColor: "tomato",
+          tabBarInactiveTintColor: "gray",
+          headerShown: false,
+        })}
+      >
+        <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Screen name="Home" component={Home} />
+      </Tab.Navigator>
+    );
+  };
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+
+// login
+
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React from "react";
+
+export default function Login({ navigation }) {
+  function handlePress() {
+    navigation.navigate("TabNavigator", { screen: "Home" });
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Login</Text>
+      <TouchableOpacity style={styles.button} onPress={handlePress}>
+        <Text style={styles.textButton}>Go to Home</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "orange",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text: {
+    fontSize: 40,
+    color: "white",
+    fontWeight: "bold",
+    backgroundColor: "black",
+    paddingHorizontal: 20,
+    paddingVertical: 40,
+  },
+  button: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  textButton: {
+    fontSize: 30,
+  },
+});
+
